@@ -5,7 +5,7 @@ from product import views
 
 
 urlpatterns = [path('all/',views.Allproducts.as_view(), name='all'),
-               path('search/', views.Searchresult.as_view(),name='search_results'),
+               path('search/', views.search_api,name='search_results'),
                path("accounts/", include("django.contrib.auth.urls")),
                path("cart/", login_required(views.ListCartItem.as_view()), name='cart'),
                path("add_to_card/<int:Product_id>",views.Add_to_cart, name="add_to_cart"),
@@ -18,4 +18,6 @@ urlpatterns = [path('all/',views.Allproducts.as_view(), name='all'),
                path("wishlist/<int:Product_id>/",views.add_wishlist,name = 'wishlist'),
                path("wishall", login_required(views.Wishproducts.as_view()), name='wish'),
                path("rm_wish/<int:Product_id>/", views.rm_wishlist, name='rm_wish'),
+                path('product_api/', views.product_api, name='product_api') ,
+               path('cart_api/', views.cart_api, name='cart_api') 
                ]

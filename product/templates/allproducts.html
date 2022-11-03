@@ -4,19 +4,23 @@
 <style>
         .addcartbutton:hover {
                 transform: scale(1.2);
+        }
+        .container {
+                margin: 85px;
+                display: inline-block;
 
         }
 </style>
 {% for i in object_list %}
 
-<div style="margin-left: 41% ;">
-        <h2> {{ i.title }}</h2>
-        <div style="display:flex ;">
+
+<div class="container">
+        <div class="row">
                 <img src="{{ i.image.url }}" , width=200px height="250px"><br>
-                <div style="margin-left:50px ;margin-top: 15%;">
-                        Brand : {{ i.brand }}<br>
-                        price: Rs{{ i.price }}<br>
-                        stock: {{ i.stock }}<br>
+                        <h2> {{ i.title }}</h2>
+                        <p>Brand : {{ i.brand }}</p>
+                        <p> price: Rs{{ i.price }}</p>
+                        <p>stock: {{ i.stock }}</p>
                         <br>
                         <form method="post" action="{% url 'add_to_cart' i.id %}">
                                 {% csrf_token %}
