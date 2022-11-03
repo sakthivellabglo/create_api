@@ -1,3 +1,4 @@
+import json
 from django.http import HttpResponse
 from django.views.generic.list import ListView
 from django .contrib import messages
@@ -6,7 +7,8 @@ from django.shortcuts import redirect
 from django.db.models import Sum, F, Q
 
 from product.models import Cart, Order, Product, Wishlist
-
+from django.core import serializers
+from django.http import JsonResponse
 
 class Allproducts(ListView):
     model = Product
@@ -165,3 +167,20 @@ class Wishproducts(ListView):
     def get_queryset(self):
         object_list = Wishlist.objects.filter(user=self.request.user)
         return object_list
+
+def product_api(request):
+    products =  Product.objects.all()
+    data = serializers.serialize("json", products)
+    return JsonResponse(json.loads(data), safe=False)
+def cart_api(request):
+    products =  Cart.objects.all()
+    data = serializers.serialize("json", products)
+    return JsonResponse(json.loads(data), safe=False)
+
+def search_api(request):
+     query1 = request.GET.get("product_name")
+     object_list = Product.objects.filter((Q(title__icontains=query1) | Q(
+            brand__name__icontains=query1)) & ~Q(stock__contains="0"))
+     #data = serializers.serialize("json", object_list)
+     data =list(object_list.values())
+     return JsonResponse(data,safe=False)

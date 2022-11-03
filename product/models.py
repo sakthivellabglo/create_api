@@ -35,7 +35,7 @@ class Product(TimeStampBaseModel):
     stock = models.BooleanField(default=True)
 
     def __str__(self):
-        return " {} {} {} {} {} ".format(self.title, self.image, self.price, self.brand, self.stock)
+        return " {}  ".format(self.title )
 
 
 class Cart(TimeStampBaseModel):
