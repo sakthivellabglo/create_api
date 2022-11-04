@@ -12,8 +12,9 @@
 </center>
 {% for i in object_list %}
 <center>
-    <h2> {{ i.title }} </h2>
+   
     <img src="{{ i.image.url }}" , width=150px><br>
+    <h2> {{ i.title }} </h2>
     Brand :{{ i.brand }}<br>
     price :Rs{{ i.price }} <br>
     stock: {{ i.stock }}<br>

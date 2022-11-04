@@ -6,15 +6,15 @@
 <center>
     <h1> <a href="{% url 'all' %}" style="color:black ; text-decoration: none;">SAKTHI MOBILES</a></h1>
 </center>
-<a href="{% url 'all' %}"><img src="/images/home.jpg" class="addcart"style="width: 30px; margin-left:10px "></a>
+<a href="{% url 'all' %}"><img src="/images/home.jpg" class="addcart" style="width: 30px; margin-left:10px "></a>
 <center>
     <form action="{% url 'search_results' %}" method="get">
         <input name="product_name" type="text" placeholder="product name...">
         <button type="submit">search</button>
     </form>
 </center>
-<p ><a href="{% url 'add_to_order' %}"> <img src="/images/orders.webp" class="addcart"
-    style="width: 20px; margin-left: 1220px; position:absolute; "></a></p>
+<p><a href="{% url 'add_to_order' %}"> <img src="/images/orders.webp" class="addcart"
+            style="width: 20px; margin-left: 1220px; position:absolute; "></a></p>
 <a href="{% url 'cart' %}"><img src="/images/images.png" class="addcart"
         style="width: 20px; margin-left: 1160px; position:absolute;"></a>
 <a href="{% url 'wish' %}"><img src="/images/heart.png" class="addcart"

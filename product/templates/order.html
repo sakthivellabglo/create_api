@@ -8,8 +8,9 @@
 
         {% for i in j.items.all%}
         <center>
-                <h2> {{ i.product.title }}</h2>
+                
                 <img src="{{ i.product.image.url }}" , width=150px><br>
+                <h2> {{ i.product.title }}</h2>
                 price :Rs {{i.price}}<br>
                 quntity : {{i.quantity}}<br>
                 tax : {{j.tax}}% <br>

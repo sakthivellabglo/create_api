@@ -19,5 +19,6 @@ urlpatterns = [path('all/',views.Allproducts.as_view(), name='all'),
                path("wishall", login_required(views.Wishproducts.as_view()), name='wish'),
                path("rm_wish/<int:Product_id>/", views.rm_wishlist, name='rm_wish'),
                 path('product_api/', views.product_api, name='product_api') ,
-               path('cart_api/', views.cart_api, name='cart_api') 
+               path('cart_api/', views.cart_api, name='cart_api') ,
+               path('order_api/', views.order_api, name='order_api') 
                ]

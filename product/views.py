@@ -181,6 +181,11 @@ def search_api(request):
      query1 = request.GET.get("product_name")
      object_list = Product.objects.filter((Q(title__icontains=query1) | Q(
             brand__name__icontains=query1)) & ~Q(stock__contains="0"))
-     #data = serializers.serialize("json", object_list)
-     data =list(object_list.values())
-     return JsonResponse(data,safe=False)
+     data = serializers.serialize("json", object_list)
+     #data =list(object_list.values())
+     return JsonResponse(json.loads(data),safe=False)
+
+def order_api(request):
+    products =  Order.objects.all()
+    data = serializers.serialize("json", products)
+    return JsonResponse(json.loads(data), safe=False)
