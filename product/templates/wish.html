@@ -3,8 +3,9 @@
 {% for i in object_list %}
 {% for j in i.product.all%}
 <center>
-    <h2> {{ j.title }} </h2>
+    
     <img src="{{ j.image.url }}" , width=150px><br>
+    <h2> {{ j.title }} </h2>
     Brand :{{ j.brand }}<br>
     price :Rs{{ j.price }} <br>
     <form method="post" action="{% url 'rm_wish' i.id %}">
