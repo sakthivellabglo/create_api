@@ -1,0 +1,24 @@
+{% extends "search.html" %}
+
+{% block content %}
+{% for j in object_list %}
+
+<div>
+        {% for i in j.items.all%}
+        <center>
+                
+                <img src="{{ i.product.image.url }}" , width=150px><br>
+                <h2> {{ i.product.title }}</h2>
+                price :Rs {{i.price}}<br>
+                quntity : {{i.quantity}}<br>
+                tax : {{j.tax}}% <br>
+                order_status : {{j.order_status}}<br>
+                <br>
+        </center>
+
+</div>
+{% endfor %}
+
+{% endfor %}
+<br>
+{% endblock %}

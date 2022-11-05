@@ -55,6 +55,8 @@ class Order(TimeStampBaseModel):
     items = models.ManyToManyField(Cart)
     tax = models.FloatField()
     total_product_cost = models.PositiveIntegerField()
+    total_product_price = models.PositiveIntegerField()
+    total_tax = models.FloatField()
     order_status = models.IntegerField(
         choices=Order_choices,
         default=PENDING

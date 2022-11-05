@@ -135,8 +135,11 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STRIPE_PUBLISHABLE_KEY ='pk_test_51M0fZUSJedpYswPhdM9vIJiddaoxhXCGEbppzzbef3Nrl33AiHp3iEvMulHvZUbEjVc3aOJ6JFuD43Dp70J57qed00iX3ABxn3'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
