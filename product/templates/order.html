@@ -36,6 +36,16 @@
         <h4>total_price:Rs {{total_price}} </h4>
         <br>
         <a href="{% url 'order_place' %}"><button>place order</button></a>
-</center>
 
+<br>
+<br>
+<form method="post" action="{% url 'all'%}">
+<script src="https://checkout.stripe.com/checkout.js " class="stripe-button"
+    data-key="{{ key }}"
+    data-description="Patment Gateway"
+    data-amount="{{total_price}}00"
+    data-currency= "inr">
+</script>
+</form>
+</center>
 {% endblock %}

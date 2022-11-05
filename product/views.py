@@ -1,14 +1,19 @@
 import json
+import stripe
 from django.http import HttpResponse
 from django.views.generic.list import ListView
 from django .contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.db.models import Sum, F, Q
-
-from product.models import Cart, Order, Product, Wishlist
 from django.core import serializers
 from django.http import JsonResponse
+from django.conf import settings
+from e_commerce.settings import STRIPE_PUBLISHABLE_KEY
+
+from product.models import Cart, Order, Product, Wishlist
+
+stripe.api_key = 'sk_test_51M0fZUSJedpYswPhm7MNkYmbVQt2jmmZXNROdSaM73KQ11Y7kkJllXki6I1NIvsMR7XLQfisvlrVKXfaozRd5ZHR00VvOF4Vhq'
 
 class Allproducts(ListView):
     model = Product
@@ -64,7 +69,8 @@ def order_remove(request, Cart_id, order_id):
         qunt = remove_item.quantity
         remove_price = Order.objects.get(id=order_id)
         remove_item.delete()
-        total_product_cost = remove_price.items.values().aggregate(price__sum=Sum(F('price')*F('quantity')))['price__sum']
+        total_product_cost = remove_price.items.values().aggregate(
+            price__sum=Sum(F('price')*F('quantity')))['price__sum']
         if total_product_cost is None:
             print("dvsdvsdv  dvdsfds ")
             remove_price.delete()
@@ -78,7 +84,7 @@ def order_remove(request, Cart_id, order_id):
 def add_quntity(request, product_id):
     if request.method == "POST":
         product = Product.objects.get(id=product_id)
-        cart = Cart.objects.filter(product=product ,user = request.user)
+        cart = Cart.objects.filter(product=product, user=request.user)
         qunt = request.POST.get('quantity')
         cart.update(quantity=qunt)
         return redirect("cart")
@@ -94,8 +100,9 @@ def add_order(request):
     total_product_price = Cart.objects.filter(Q(user=request.user) & Q(is_active=True)).aggregate(
         total=Sum(F('price')*F('quantity')))['total']
     if total_product_price is not None:
+        tax = total_product_price*taxs/100
         orders = Order.objects.create(
-            user=request.user, tax=taxs, total_product_cost=total_product_price,)
+            user=request.user, tax=taxs, total_product_cost=total_product_price, total_product_price=total_product_price+tax, total_tax=tax)
         orders.items.add(
             *Cart.objects.filter(Q(user=request.user) & Q(is_active=True)))
         inactive = Cart.objects.filter(user=request.user)
@@ -118,8 +125,10 @@ class Orderproducts(ListView):
             Sum('total_product_cost'))['total_product_cost__sum']
         context['tax'] = Order.objects.filter(user=self.request.user).aggregate(
             total=Sum(F('total_product_cost') * 18/100))['total']
+        context['key'] = settings.STRIPE_PUBLISHABLE_KEY
         if context['sub_total'] is not None:
             context['total_price'] = context['sub_total'] + context['tax']
+            stripe.PaymentIntent.create(amount=   context['total_price'], currency="usd", payment_method_types=["card"])
         return context
 
 
@@ -129,7 +138,8 @@ class ListCartItem(ListView):
     template_name = 'list_cartitems.html'
 
     def get_queryset(self):
-        object_list = Cart.objects.filter((Q(user=self.request.user) & Q(is_active=True)))
+        object_list = Cart.objects.filter(
+            (Q(user=self.request.user) & Q(is_active=True)))
         if object_list.exists():
             pass
         else:
@@ -138,12 +148,24 @@ class ListCartItem(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['total_price'] = self.get_queryset().aggregate(Sum('price'))['price__sum']
+        context['total_price'] = self.get_queryset().aggregate(Sum('price'))[
+            'price__sum']
         return context
+
+
+class Orderhistory(ListView):
+    model = Order
+    template_name = "orderhistory.html"
+
+    def get_queryset(self):
+        object_list = Order.objects.filter(user=self.request.user)
+        return object_list
+
 
 @login_required
 def order_place(request):
     return HttpResponse("your order is placed")
+
 
 @login_required
 def add_wishlist(request, Product_id):
@@ -153,12 +175,14 @@ def add_wishlist(request, Product_id):
         obj.product.add(wish_product)
     return redirect('all')
 
+
 def rm_wishlist(request, Product_id):
     if request.method == "POST":
         wish_product = Product.objects.get(id=Product_id)
         obj = Wishlist.objects.get(user=request.user)
         obj.product.remove(wish_product)
     return redirect('all')
+
 
 class Wishproducts(ListView):
     model = Wishlist
@@ -168,24 +192,29 @@ class Wishproducts(ListView):
         object_list = Wishlist.objects.filter(user=self.request.user)
         return object_list
 
+
 def product_api(request):
-    products =  Product.objects.all()
+    products = Product.objects.all()
     data = serializers.serialize("json", products)
     return JsonResponse(json.loads(data), safe=False)
+
+
 def cart_api(request):
-    products =  Cart.objects.all()
+    products = Cart.objects.all()
     data = serializers.serialize("json", products)
     return JsonResponse(json.loads(data), safe=False)
+
 
 def search_api(request):
-     query1 = request.GET.get("product_name")
-     object_list = Product.objects.filter((Q(title__icontains=query1) | Q(
-            brand__name__icontains=query1)) & ~Q(stock__contains="0"))
-     data = serializers.serialize("json", object_list)
-     #data =list(object_list.values())
-     return JsonResponse(json.loads(data),safe=False)
+    query1 = request.GET.get("product_name")
+    object_list = Product.objects.filter((Q(title__icontains=query1) | Q(
+        brand__name__icontains=query1)) & ~Q(stock__contains="0"))
+    data = serializers.serialize("json", object_list)
+    #data =list(object_list.values())
+    return JsonResponse(json.loads(data), safe=False)
+
 
 def order_api(request):
-    products =  Order.objects.all()
+    products = Order.objects.all()
     data = serializers.serialize("json", products)
     return JsonResponse(json.loads(data), safe=False)
