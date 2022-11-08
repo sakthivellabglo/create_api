@@ -136,7 +136,7 @@ STATIC_URL = '/static/'
 
 STATIC_URL = 'static/'
 STRIPE_PUBLISHABLE_KEY ='pk_test_51M0fZUSJedpYswPhdM9vIJiddaoxhXCGEbppzzbef3Nrl33AiHp3iEvMulHvZUbEjVc3aOJ6JFuD43Dp70J57qed00iX3ABxn3'
-
+STRIPE_SECRET_KEY='sk_test_51M0fZUSJedpYswPhm7MNkYmbVQt2jmmZXNROdSaM73KQ11Y7kkJllXki6I1NIvsMR7XLQfisvlrVKXfaozRd5ZHR00VvOF4Vhq'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
