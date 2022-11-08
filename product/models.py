@@ -63,9 +63,17 @@ class Order(TimeStampBaseModel):
     )
 
     def __str__(self):
-        return self.user.username
+        return " {}  ".format(self.id )
 
 
 class Wishlist(TimeStampBaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ManyToManyField(Product)
+
+
+class Payment(models.Model):
+     order_id =  models.ForeignKey(Order, on_delete=models.CASCADE)
+     payment_status = models.IntegerField (choices=Order_choices,
+        default=PENDING
+    )
+     transaction_id = models.CharField(max_length=100)

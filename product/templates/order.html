@@ -19,7 +19,7 @@
                 <center>
                         <form method="post" action="{% url 'order_remove' i.id j.id %}">
                                 {% csrf_token %}
-                                <button>remove</button><br>
+                                <button>remove</button><br>   
                         </form>
                 </center>
 
@@ -35,17 +35,24 @@
         <h4>tax charges : {{tax|floatformat:2}} </h4>
         <h4>total_price:Rs {{total_price}} </h4>
         <br>
-        <a href="{% url 'order_place' %}"><button>place order</button></a>
+        <a href="{% url 'checkout' %}"><button>place order</button></a>
 
 <br>
 <br>
-<form method="post" action="{% url 'all'%}">
+
 <script src="https://checkout.stripe.com/checkout.js " class="stripe-button"
-    data-key="{{ key }}"
-    data-description="Patment Gateway"
-    data-amount="{{total_price}}00"
-    data-currency= "inr">
-</script>
-</form>
+ data-key="{{ key }}"
+ data-amount="{{ total_price }}00"    
+ data-name="Store"
+ data-description="{{ description }}"
+ data-image="{{ '/image/apple.png' }}"
+ data-email = "{{ user.email }}"
+ data-locale="auto"
+ data-currency="inr"
+ data-shipping-address="true"
+ data-billing-address="true"                                
+ data-allow-remember-me="true"                               
+ data-label="Pay with card"></script>
 </center>
+
 {% endblock %}

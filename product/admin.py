@@ -1,5 +1,5 @@
 from django.contrib import admin
-from product.models import Brand, Cart, Product, Order, Wishlist
+from product.models import Brand, Cart, Payment, Product, Order, Wishlist
 
 
 class display_product(admin.ModelAdmin):
@@ -16,3 +16,4 @@ admin.site.register(Cart)
 admin.site.register(Order)
 admin.site.register(Wishlist)
 admin.site.register(Brand)
+admin.site.register(Payment)
