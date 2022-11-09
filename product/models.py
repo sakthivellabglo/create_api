@@ -4,9 +4,9 @@ FAILED = 0
 SUCCESS = 1
 PENDING = 2
 Order_choices = [
-    ('PENDING', 'PENDING'),
-    ('SUCCESS', 'sucess'),
-    ('FAILED', 'failed'),
+    (PENDING, 'PENDING'),
+    (SUCCESS, 'sucess'),
+    (FAILED, 'failed'),
 ]
 
 
@@ -61,11 +61,6 @@ class Order(TimeStampBaseModel):
         choices=Order_choices,
         default=PENDING
     )
-
-    def __str__(self):
-        return " {}  ".format(self.id )
-
-
 class Wishlist(TimeStampBaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ManyToManyField(Product)
@@ -73,7 +68,8 @@ class Wishlist(TimeStampBaseModel):
 
 class Payment(models.Model):
      order_id =  models.ForeignKey(Order, on_delete=models.CASCADE)
-     payment_status = models.IntegerField (choices=Order_choices,
+     payment_status = models.IntegerField(
+        choices=Order_choices,
         default=PENDING
     )
      transaction_id = models.CharField(max_length=100)

@@ -45,11 +45,9 @@
   </div>
   {% endfor %}
   <br>
-  <form method="post" action="{% url 'add_to_order' %}">
-    {% csrf_token %}
-    <button>order now</button><br>
-  </form>
-  <br>
+    <a href="{% url 'checkout' %}"><button style="color: green;">place order</button></a><br>
+    <br>
+
   total_price : {{ total_price }}
   
 </center>
